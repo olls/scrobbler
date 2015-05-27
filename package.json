@@ -1,11 +1,19 @@
 {
-  "name": "vinyl-scrobbler",
+  "name": "scrobbler",
   "version": "0.0.0",
   "description": "Better Last.fm scrobbler for discogs",
+  "repository": "github.com/olls/scrobbler",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "olls",
-  "license": "BSD-2-Clause"
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "express": "~4.12.4",
+    "lastfm": "~0.9.2",
+    "disconnect": "~0.6.2",
+    "express-session": "~1.11.2",
+    "jade": "~1.10.0"
+  }
 }
