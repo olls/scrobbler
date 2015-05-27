@@ -67,7 +67,11 @@ app.get('/', function (req, res) {
   if (!req.session.lastfm_tok) {
     res.redirect('/login');
   } else {
-    res.render('index', { title: 'Hey', message: req.session.lastfm_tok});
+    if (req.query.id) {
+      // Scrobble
+      var scrobbling = {title: 'Hey Jude'};
+    }
+    res.render('index', {scrobbling: scrobbling});
   }
 })
 
