@@ -72,7 +72,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/login', function (req, res) {
-  res.redirect('http://www.last.fm/api/auth/?api_key=' + LASTFM_KEY + '&cb=http://' + req.hostname + ':3000/loggedin');
+  res.redirect('http://www.last.fm/api/auth/?api_key=' + LASTFM_KEY + '&cb=http://' + req.hostname + ':' + server.address().port + '/loggedin');
 });
 
 app.get('/loggedin', function (req, res) {
