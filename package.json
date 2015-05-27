@@ -1,0 +1,11 @@
+{
+  "name": "vinyl-scrobbler",
+  "version": "0.0.0",
+  "description": "Better Last.fm scrobbler for discogs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "olls",
+  "license": "BSD-2-Clause"
+}
