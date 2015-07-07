@@ -3,8 +3,8 @@ var Discogs = require('disconnect').Client,
     express = require('express'),
     session = require('express-session');
 
-var LASTFM_KEY = 'ec9330db68f09f274c24270b4557de07';
-var LASTFM_SECRET = '9cddd758938b88e6d31969de833931c3';
+var LASTFM_KEY = 'KEY';
+var LASTFM_SECRET = 'SECRET_GOES_HERE';
 
 // function main () {
 
