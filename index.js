@@ -8,13 +8,6 @@ var LASTFM_SECRET = 'SECRET_GOES_HERE';
 
 // function main () {
 
-//   var discog = new Discogs().database();
-
-//   var lastfm = new LastFmNode({
-//     api_key: LASTFM_KEY,
-//     secret: LASTFM_SECRET
-//   });
-
 //   get_session(lastfm);
 
 //   // discog.release(1024257, function(err, data){
@@ -34,24 +27,68 @@ var LASTFM_SECRET = 'SECRET_GOES_HERE';
 
 //   // });
 
-
 // }
 
-// function get_session (lastfm, cb) {
+function time_to_ms (time) {
+  var parts = time.split(':').reverse();
+  return 1000 * (parts[0] + parts[1] * 60);
+}
 
-//   // Get token
+function scrobble_record (id, token, web_session) {
+  discog.release(id, function (error, record) {
+    if (error) {
+      throw error;
+    }
 
-//   lastfm.session({
-//     token: token,
-//     handlers: {
-//       error: function (error) {
-//         console.error(error);
-//       }
-//     }
-//   }).on('success', cb);
+    lastfm.session({
+      token: token,
+      handlers: {
+        error: function (error) {
+          console.error(error);
+        }
+      }
+    }).on('success', function (lfm_session) {
 
-// }
+      var artist = record.artists[0];
 
+      var dt = 0;
+      var time = Math.floor(Date.now() / 1000); // In seconds
+
+      web_session.tracklist = record.tracklist;
+
+      record.tracklist.forEach(function (track) {
+        setTimeout(function () {
+          lastfm.update('nowPlaying', lfm_session, {
+            artist: artist,
+            track: track.title,
+            album: record.title,
+            trackNumber: track.position,
+            timestamp: time + (dt / 1000)
+          });
+
+          web_session.now_playing = track;
+
+          console.log('Set now playing.');
+          console.log(web_session.now_playing);
+        }, dt);
+
+        dt = dt + time_to_ms(track.duration);
+
+        // setTimeout(function () {
+        //   lastfm.request('track.scrobble');
+        // }, dt);
+      });
+
+    });
+  });
+}
+
+
+var discog = new Discogs().database();
+var lastfm = new LastFmNode({
+  api_key: LASTFM_KEY,
+  secret: LASTFM_SECRET
+});
 
 var app = express();
 
@@ -69,9 +106,11 @@ app.get('/', function (req, res) {
   } else {
     if (req.query.id) {
       // Scrobble
-      var scrobbling = {title: 'Hey Jude'};
+      scrobble_record(req.query.id, req.session.lastfm_tok, req.session);
+
     }
-    res.render('index', {scrobbling: scrobbling});
+    console.log(req.session.now_playing);
+    res.render('index', {scrobbling: req.session.now_playing, tracks: req.session.tracklist});
   }
 })
 

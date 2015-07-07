@@ -14,3 +14,6 @@ html
         input(name='id')
       br
       input(type='submit')
+    ul.record
+      each track in tracks ? tracks : []
+        li= track.title
